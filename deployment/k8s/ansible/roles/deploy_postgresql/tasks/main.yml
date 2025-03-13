@@ -1,0 +1,21 @@
+---
+- name: Add bitnami repo
+  kubernetes.core.helm_repository:
+    binary_path: "{{ helm_bin_path }}"
+    name: bitnami
+    repo_url: "https://charts.bitnami.com/bitnami"
+
+- name: DEBUG - values.yaml
+  debug:
+    msg: "{{ lookup('template', 'values.yaml') | from_yaml }}"
+  when: debug | default(false)
+  
+- name: Deploy Ollama with helm
+  kubernetes.core.helm:
+    binary_path: "{{ helm_bin_path }}"
+    name: postgresql
+    chart_ref: bitnami/postgresql
+    #chart_version: 0.5.12
+    values: "{{ lookup('template', 'values.yaml') | from_yaml }}"
+    release_namespace: "{{ kube_namespace }}"
+    update_repo_cache: true

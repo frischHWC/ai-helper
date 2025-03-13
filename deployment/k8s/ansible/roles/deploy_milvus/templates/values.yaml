@@ -1,0 +1,197 @@
+# Refer to https://github.com/zilliztech/milvus-helm/blob/master/charts/milvus/values.yaml
+image:
+  all:
+    tag: v2.5.6
+
+ingress:
+  enabled: true
+  rules:
+    - host: "milvus.{{ domain_name }}"
+      path: "/"
+      pathType: "Prefix"
+
+cluster:
+  enabled: {% if milvus.standalone.replicas > 0 %}false{% else %}true{% endif %}
+
+standalone:
+  replicas: {{ milvus.standalone.replicas }}
+  resources: 
+    requests:
+      cpu: {{ milvus.standalone.req_cpu }}
+      memory: {{ milvus.standalone.req_mem }}
+    limits:
+      cpu: {{ milvus.standalone.lim_cpu }}
+      memory: {{ milvus.standalone.lim_mem }}
+  persistence:
+    persistentVolumeClaim:
+      size: {{ milvus.standalone.disk_size }}
+
+proxy:
+  enabled: "{% if milvus.standalone.replicas > 0 %}false{% else %}true{% endif %}"
+  replicas: {{ milvus.proxy.replicas }}
+  resources: 
+    requests:
+      cpu: {{ milvus.proxy.req_cpu }}
+      memory: {{ milvus.proxy.req_mem }}
+    limits:
+      cpu: {{ milvus.proxy.lim_cpu }}
+      memory: {{ milvus.proxy.lim_mem }}
+
+mixCoordinator:
+  enabled: "{% if milvus.standalone.replicas > 0 or milvus.mixCoordinator.replicas == 0 %}false{% else %}true{% endif %}"
+  replicas: {{ milvus.mixCoordinator.replicas }}
+  resources: 
+    requests:
+      cpu: {{ milvus.mixCoordinator.req_cpu }}
+      memory: {{ milvus.mixCoordinator.req_mem }}
+    limits:
+      cpu: {{ milvus.mixCoordinator.lim_cpu }}
+      memory: {{ milvus.mixCoordinator.lim_mem }}
+
+rootCoordinator:
+  enabled: "{% if milvus.standalone.replicas > 0 or milvus.mixCoordinator.replicas > 0 %}false{% else %}true{% endif %}"
+  replicas: {{ milvus.rootCoordinator.replicas }}
+  resources: 
+    requests:
+      cpu: {{ milvus.rootCoordinator.req_cpu }}
+      memory: {{ milvus.rootCoordinator.req_mem }}
+    limits:
+      cpu: {{ milvus.rootCoordinator.lim_cpu }}
+      memory: {{ milvus.rootCoordinator.lim_mem }}
+
+queryCoordinator:
+  enabled: "{% if milvus.standalone.replicas > 0 or milvus.mixCoordinator.replicas > 0 %}false{% else %}true{% endif %}"
+  replicas: {{ milvus.queryCoordinator.replicas }}
+  resources: 
+    requests:
+      cpu: {{ milvus.queryCoordinator.req_cpu }}
+      memory: {{ milvus.queryCoordinator.req_mem }}
+    limits:
+      cpu: {{ milvus.queryCoordinator.lim_cpu }}
+      memory: {{ milvus.queryCoordinator.lim_mem }}
+
+queryNode:
+  enabled: "{% if milvus.standalone.replicas > 0 %}false{% else %}true{% endif %}"
+  replicas: {{ milvus.queryNode.replicas }}
+  resources: 
+    requests:
+      cpu: {{ milvus.queryNode.req_cpu }}
+      memory: {{ milvus.queryNode.req_mem }}
+    limits:
+      cpu: {{ milvus.queryNode.lim_cpu }}
+      memory: {{ milvus.queryNode.lim_mem }}
+
+indexCoordinator:
+  enabled: "{% if milvus.standalone.replicas > 0 or milvus.mixCoordinator.replicas > 0 %}false{% else %}true{% endif %}"
+  replicas: {{ milvus.indexCoordinator.replicas }}
+  resources: 
+    requests:
+      cpu: {{ milvus.indexCoordinator.req_cpu }}
+      memory: {{ milvus.indexCoordinator.req_mem }}
+    limits:
+      cpu: {{ milvus.indexCoordinator.lim_cpu }}
+      memory: {{ milvus.indexCoordinator.lim_mem }}
+
+indexNode:
+  enabled: "{% if milvus.standalone.replicas > 0 %}false{% else %}true{% endif %}"
+  replicas: {{ milvus.indexNode.replicas }}
+  resources: 
+    requests:
+      cpu: {{ milvus.indexNode.req_cpu }}
+      memory: {{ milvus.indexNode.req_mem }}
+    limits:
+      cpu: {{ milvus.indexNode.lim_cpu }}
+      memory: {{ milvus.indexNode.lim_mem }}
+
+dataCoordinator:
+  enabled: "{% if milvus.standalone.replicas > 0 or milvus.mixCoordinator.replicas > 0 %}false{% else %}true{% endif %}"
+  replicas: {{ milvus.dataCoordinator.replicas }}
+  resources: 
+    requests:
+      cpu: {{ milvus.dataCoordinator.req_cpu }}
+      memory: {{ milvus.dataCoordinator.req_mem }}
+    limits:
+      cpu: {{ milvus.dataCoordinator.lim_cpu }}
+      memory: {{ milvus.dataCoordinator.lim_mem }}
+
+dataNode:
+  enabled: "{% if milvus.standalone.replicas > 0 %}false{% else %}true{% endif %}"
+  replicas: {{ milvus.dataNode.replicas }}
+  resources: 
+    requests:
+      cpu: {{ milvus.dataNode.req_cpu }}
+      memory: {{ milvus.dataNode.req_mem }}
+    limits:
+      cpu: {{ milvus.dataNode.lim_cpu }}
+      memory: {{ milvus.dataNode.lim_mem }}
+
+attu:
+  enabled: true
+  image:
+    repository: zilliz/attu
+    tag: v2.4.12
+  ingress:
+    enabled: true
+    hosts:
+      - attu.{{ domain_name }}
+  resources: 
+    requests:
+      cpu: {{ milvus.attu.req_cpu }}
+      memory: {{ milvus.attu.req_mem }}
+    limits:
+      cpu: {{ milvus.attu.lim_cpu }}
+      memory: {{ milvus.attu.lim_mem }}
+
+minio:
+  enabled: "true"
+  replicas: {{ milvus.minio.replicas }}
+  resources: 
+    requests:
+      cpu: {{ milvus.minio.req_cpu }}
+      memory: {{ milvus.minio.req_mem }}
+    limits:
+      cpu: {{ milvus.minio.lim_cpu }}
+      memory: {{ milvus.minio.lim_mem }}
+  persistence:
+    size: {{ milvus.minio.disk_size }}
+  mode: "{% if milvus.minio.replicas == 1 %}standalone{% else %}distributed{% endif %}"
+
+etcd:
+  enabled: "true"
+  image:
+    repository: "milvusdb/etcd"
+    tag: "3.5.16-r1"
+  persistence:
+    size: {{ milvus.etcd.disk_size }}
+  replicaCount: {{ milvus.etcd.replicas }}
+  resources: 
+    requests:
+      cpu: {{ milvus.etcd.req_cpu }}
+      memory: {{ milvus.etcd.req_mem }}
+    limits:
+      cpu: {{ milvus.etcd.lim_cpu }}
+      memory: {{ milvus.etcd.lim_mem }}
+
+pulsar:
+  enabled: false
+pulsarv3:
+  enabled: false 
+ 
+kafka:
+  enabled: "{% if milvus.standalone.replicas > 0 %}false{% else %}true{% endif %}"
+  heapOpts: "{{ milvus.kafka.heap_opts }}"
+  replicaCount: {{ milvus.kafka.replicas }}
+  persistence:
+    enabled: true
+    accessMode: ReadWriteOnce
+    size: {{ milvus.kafka.disk_size }}
+  resources:
+    requests: 
+      memory: {{ milvus.kafka.req_mem }}
+      cpu: {{ milvus.kafka.req_cpu }}
+    limits:
+      memory: {{ milvus.kafka.lim_mem }}
+      cpu: {{ milvus.kafka.lim_cpu }}
+  zookeeper:
+    enabled: true
+    replicaCount: {{ milvus.kafka.zk_nodes }}

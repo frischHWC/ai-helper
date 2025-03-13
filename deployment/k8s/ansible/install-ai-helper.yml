@@ -1,0 +1,24 @@
+# 1. Delete previous if existing
+- name: Delete Previous Resources
+  hosts: node
+  gather_facts: false
+  roles: 
+    - role: delete_previous
+      when: destroy_previous | default(false)
+
+# 2. Create namespace
+- name: Create Namespace
+  hosts: node
+  gather_facts: false
+  roles: 
+    - role: create_ns
+
+# 3. Install tools one by one
+- name: Install Tools
+  hosts: node
+  gather_facts: false
+  roles: 
+    - role: deploy_ollama
+    - role: deploy_milvus
+    - role: deploy_postgresql
+    - role: deploy_webui

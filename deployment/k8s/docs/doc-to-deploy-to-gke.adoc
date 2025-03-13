@@ -1,0 +1,54 @@
+# Doc to manually deploy to a GKE cluster
+
+## PREREQS
+
+have gcloud and this plugin installed: https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl#install_plugin
+have kubectl: gcloud components install kubectl 
+have helm installed
+
+
+## Gcloud
+
+1. requires a dedicated network 
+TODO: Add command line
+
+
+2. Launch creation with:
+
+gcloud beta container --project "gcp-ps" clusters create-auto "mygkecluster" --region "europe-west9" --release-channel "regular" --tier "standard" --enable-dns-access --enable-ip-access --enable-master-authorized-networks --master-authorized-networks 165.1.200.190/32,165.1.200.192/32 --no-enable-google-cloud-access --network "projects/gcp-ps/global/networks/mygkenetwork" --subnetwork "projects/gcp-ps/regions/europe-west9/subnetworks/mygkenetwork" --cluster-ipv4-cidr "/17" --binauthz-evaluation-mode=DISABLED
+
+
+## Open web UI
+
+helm repo add open-webui https://open-webui.github.io/helm-charts
+helm repo update
+helm install openwebui open-webui/open-webui
+
+Need to open LB to access open web ui:
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-lb-service
+spec:
+  type: LoadBalancer
+  selector:
+   app.kubernetes.io/instance: openwebui
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+
+Maybe tag before with a label ollama instance 
+
+
+## Ollama
+
+
+
+## Milvus
+
+
+
+## Destroy everything
+
+

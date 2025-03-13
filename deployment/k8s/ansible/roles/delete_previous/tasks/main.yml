@@ -1,0 +1,44 @@
+---
+- name: Remove milvus helm 
+  kubernetes.core.helm:
+    binary_path: "{{ helm_bin_path }}"
+    name: milvus
+    state: absent
+    wait: true
+    release_namespace: "{{ kube_namespace }}"
+
+- name: Remove postgresql helm 
+  kubernetes.core.helm:
+    binary_path: "{{ helm_bin_path }}"
+    name: postgresql
+    state: absent
+    wait: true
+    release_namespace: "{{ kube_namespace }}"
+
+- name: Remove ollama helm 
+  kubernetes.core.helm:
+    binary_path: "{{ helm_bin_path }}"
+    name: ollama
+    state: absent
+    wait: true
+    release_namespace: "{{ kube_namespace }}"
+
+- name: Remove open-webui helm 
+  kubernetes.core.helm:
+    binary_path: "{{ helm_bin_path }}"
+    name: open-webui
+    state: absent
+    wait: true
+    release_namespace: "{{ kube_namespace }}"
+
+- name: Pause to let all objects being destroyed
+  pause: 
+    seconds: 10
+
+- name: Delete k8s namespace
+  kubernetes.core.k8s:
+    name: "{{ kube_namespace }}"
+    api_version: v1
+    kind: Namespace
+    state: absent
+    wait: true

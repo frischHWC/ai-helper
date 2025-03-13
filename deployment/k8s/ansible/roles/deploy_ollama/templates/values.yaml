@@ -1,0 +1,34 @@
+# Refer to https://github.com/otwld/ollama-helm/blob/main/values.yaml
+ollama:
+{% if gpu_enabled == 'true' %}
+  gpu:
+    enabled: true
+    type: 'nvidia'
+    number: 1
+{% endif %}
+  models:
+    pull:
+      - nomic-embed-text
+      - mistral
+    run:
+      - mistral
+
+ingress:
+  enabled: true
+  hosts:
+  - host: ollama.{{ domain_name }}
+    paths:
+      - path: /
+        pathType: Prefix
+
+resources: 
+  requests:
+    cpu: {{ ollama.req_cpu }}
+    memory: {{ ollama.req_mem }}
+  limits:
+    cpu: {{ ollama.lim_cpu }}
+    memory: {{ ollama.lim_mem }}
+
+persistentVolume:
+  enabled: true
+  size: {{ ollama.disk_size }}

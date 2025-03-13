@@ -1,0 +1,62 @@
+# AI Helper
+
+Goal of this project is to help setup an internal AI tool.
+
+It should be able to be deployed locally using podman or on a k8s cluster for more scalability and to be enterprise available.
+
+
+
+## Docker deployment
+
+Go to directory _deployment/docker_ and run either the script _start.sh_ or the command:
+
+        docker compose up -d
+
+To stop it, run either the script _stop.sh_ or the command:
+
+        docker compose down
+
+
+Access open-webui by going to: [http://localhost:8001/](http://localhost:8001/)
+
+Login the first time with the user that you want and keep it for future access.
+
+
+## K8s Deployment
+
+### Requirements
+
+On the ansible controller:
+
+- Ansible 2.16
+- Kubernetes collection to install with: ``ansible-galaxy collection install kubernetes.core``
+
+On the node where ansible will connect, it requires:
+
+- Python >= 3.9: ``yum install python3.11`` && ``yum install python3.11-pip`` 
+- Python packages: 
+        ``pip3.11 install kubernetes``
+        ``pip3.11 install pyyaml``
+        ``pip3.11 install jsonpatch``
+
+_Note: There is an option to let the ansible playbook install and configure python on the remote node_
+
+
+### Launch
+
+Example to launch a deployment on node: 'mynode' and let the playbook install and configure python on it:
+
+        ./deploy-to-k8s.sh \
+                --domain-name=my.domain.com \
+                --node-to-run-commands=mynode \
+                --node-to-run-commands-user="root" \
+                --kubeconfig-file="/path/to/kubeconfig/on/mynode" \
+                --helm-bin-path="/path/to/helm/binary/on/mynode" \
+                --install-python="true"
+
+
+Access open-webui by going to: [http://openwebui.my.domain.com:8001/](http://openwebui.my.domain.com:8001/)
+
+Login the first time with the user that you want and keep it for future access.
+
+

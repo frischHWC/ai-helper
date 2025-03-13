@@ -1,0 +1,3 @@
+deployment/docker/volumes/
+deployment/docker/volumes/**
+deployment/k8s/launch.sh

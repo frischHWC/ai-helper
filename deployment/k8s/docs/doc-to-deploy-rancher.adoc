@@ -1,0 +1,168 @@
+# Doc to Deploy to Rancher
+
+Assuming there is a node (or local node) with kubectl installed and provide (or already setup) a kubeconfig file to interact with a running cluster.
+
+Best is to make a script that will pull the different helm etc... and make 
+
+
+
+## General
+
+Do:
+
+export KUBECONFIG=
+
+Namespace:
+k create ns ai-helper
+
+Add docker repository ?
+
+
+## Ollama
+
+values.yaml:
+ollama:
+  gpu:
+    enabled: true
+    type: 'nvidia'
+    number: 1
+  models:
+    pull:
+      - nomic-embed-text
+      - mistral
+    run:
+      - mistral
+
+ingress:
+  enabled: true
+  hosts:
+  - host: ollama.apps.gpuai-8.vpc.cloudera.com
+    paths:
+      - path: /
+        pathType: Prefix
+
+
+Helm commands:
+helm repo add ollama-helm https://otwld.github.io/ollama-helm/
+helm repo update
+helm install ollama ollama-helm/ollama --namespace ai-helper --values values.yaml
+
+
+Test with:
+
+curl -kv https://ollama.apps.gpuai-8.vpc.cloudera.com/api/generate -d '{
+  "model": "mistral",
+  "prompt": "Why is the sky blue?",
+  "stream": false
+}'
+
+
+## Milvus
+
+values-milvus.yaml:
+image:
+  all:
+    tag: v2.5.3
+ingress:
+  enabled: true
+  rules:
+    - host: "milvus.apps.gpuai-8.vpc.cloudera.com"
+      path: "/"
+      pathType: "Prefix"
+attu:
+  enabled: true
+  image:
+    repository: zilliz/attu
+    tag: v2.4.12
+  ingress:
+    enabled: true
+    hosts:
+      - attu.apps.gpuai-8.vpc.cloudera.com
+etcd:
+  image:
+    repository: "milvusdb/etcd"
+    tag: "3.5.16-r1"
+pulsar:
+  enabled: false
+kafka:
+  enabled: true
+  heapOpts: "-Xmx1024m -Xms512m"
+  persistence:
+    enabled: true
+    accessMode: ReadWriteOnce
+    size: 100Gi
+  resources:
+    requests: 
+      memory: 1Gi
+    limits:
+      memory: 2Gi
+    
+
+
+helm repo add milvus https://milvus-io.github.io/milvus-helm/
+helm repo update
+helm install milvus milvus/milvus  --namespace ai-helper --values values-milvus.yaml
+
+=> Unfortunately, it has been archived and does no longer works...
+
+
+## PostgresQL
+
+values-pg.yaml:
+global:
+  postgresql:
+    auth:
+      username: openwebui
+      password: openwebui1234
+      database: webui
+
+
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo update
+helm install psql bitnami/postgresql --namespace ai-helper --values values-pg.yaml
+
+
+## Open web UI
+
+
+values-owu.yaml:
+image:
+  tag: 0.5.7
+extraEnvVars:
+  - name: RAG_EMBEDDING_MODEL
+    value: nomic-embed-text
+  - name: RAG_EMBEDDING_ENGINE
+    value: ollama
+  - name: OLLAMA_BASE_URL
+    value: http://ollama.ai-helper:11434
+  - name: ENABLE_OLLAMA_API
+    value: "True"
+  - name: VECTOR_DB
+    value: milvus
+  - name: MILVUS_URI
+    value: http://root:admin@milvus.ai-helper:19530
+ollama:
+  enabled: false
+ingress:
+  enabled: true
+  host: openwebui.apps.gpuai-8.vpc.cloudera.com
+persistence:
+  size: 50Gi
+
+helm repo add open-webui https://open-webui.github.io/helm-charts
+helm repo update
+helm install openwebui open-webui/open-webui --namespace ai-helper --values values-owu.yaml
+
+
+## Destroy everything
+
+delete namespace and all resources in it
+
+helm uninstall openwebui -n ai-helper
+helm uninstall ollama -n ai-helper
+helm uninstall milvus -n ai-helper
+helm uninstall psql -n ai-helper
+
+k delete ns ai-helper
+
+

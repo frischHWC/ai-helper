@@ -1,0 +1,22 @@
+---
+- name: Add milvus repo
+  kubernetes.core.helm_repository:
+    binary_path: "{{ helm_bin_path }}"
+    name: milvus
+    repo_url: "https://zilliztech.github.io/milvus-helm/"
+
+
+- name: DEBUG - values.yaml
+  debug:
+    msg: "{{ lookup('template', 'values.yaml') | from_yaml }}"
+  when: debug | default(false) 
+
+- name: Deploy Milvus with helm
+  kubernetes.core.helm:
+    binary_path: "{{ helm_bin_path }}"
+    name: milvus
+    chart_ref: milvus/milvus
+    #chart_version: 0.5.12
+    values: "{{ lookup('template', 'values.yaml') | from_yaml }}"
+    release_namespace: "{{ kube_namespace }}"
+    update_repo_cache: true

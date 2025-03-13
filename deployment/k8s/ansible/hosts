@@ -1,0 +1,4 @@
+[node]
+${NODE_TO_RUN_COMMANDS}
+
+[all:vars]

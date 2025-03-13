@@ -1,0 +1,6 @@
+---
+- name: Install Python 3.11
+  hosts: node
+  gather_facts: false
+  roles: 
+    - role: install_python

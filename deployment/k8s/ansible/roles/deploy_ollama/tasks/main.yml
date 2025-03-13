@@ -1,0 +1,21 @@
+---
+- name: Add ollama repo
+  kubernetes.core.helm_repository:
+    binary_path: "{{ helm_bin_path }}"
+    name: ollama
+    repo_url: "https://otwld.github.io/ollama-helm/"
+
+- name: DEBUG - values.yaml
+  debug:
+    msg: "{{ lookup('template', 'values.yaml') | from_yaml }}"
+  when: debug | default(false)
+  
+- name: Deploy Ollama with helm
+  kubernetes.core.helm:
+    binary_path: "{{ helm_bin_path }}"
+    name: ollama
+    chart_ref: ollama/ollama
+    #chart_version: 0.5.12
+    values: "{{ lookup('template', 'values.yaml') | from_yaml }}"
+    release_namespace: "{{ kube_namespace }}"
+    update_repo_cache: true

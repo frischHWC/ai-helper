@@ -1,0 +1,127 @@
+# General Conf
+debug: ${DEBUG}
+domain_name: ${DOMAIN_NAME}
+destroy_previous: ${DESTROY_PREVIOUS}
+kube_namespace: ${NAMESPACE}
+kubeconfig_file: ${KUBECONFIG_FILE}
+gpu_enabled: ${GPU_ENABLED}
+helm_bin_path: ${HELM_BIN_PATH}
+
+
+# Open Webui
+openwebui:
+  db_pool_size: ${OW_DB_POOL_SIZE}
+  disk_size: ${OW_DISK_SIZE}
+  req_cpu: ${OW_REQ_CPU}
+  req_mem: ${OW_REQ_MEM}
+  lim_cpu: ${OW_LIM_CPU}
+  lim_mem: ${OW_LIM_MEM}
+
+# Postgresql
+postgresql: 
+  disk_size: ${PSQL_DISK_SIZE}
+  req_cpu: ${PSQL_REQ_CPU}
+  req_mem: ${PSQL_REQ_MEM}
+  lim_cpu: ${PSQL_LIM_CPU}
+  lim_mem: ${PSQL_LIM_MEM}
+
+# Ollama
+ollama:
+  disk_size: ${OLLAMA_DISK_SIZE}
+  req_cpu: ${OLLAMA_REQ_CPU}
+  req_mem: ${OLLAMA_REQ_MEM}
+  lim_cpu: ${OLLAMA_LIM_CPU}
+  lim_mem: ${OLLAMA_LIM_MEM}
+
+# Milvus
+milvus:
+  standalone:
+    disk_size: ${MILVUS_STANDALONE_DISK_SIZE}
+    replicas: ${MILVUS_STANDALONE_REPLICAS}
+    req_cpu: ${MILVUS_STANDALONE_REQ_CPU}
+    req_mem: ${MILVUS_STANDALONE_REQ_MEM}
+    lim_cpu: ${MILVUS_STANDALONE_LIM_CPU}
+    lim_mem: ${MILVUS_STANDALONE_LIM_MEM}
+  proxy:
+    replicas: ${MILVUS_PROXY_REPLICAS}
+    req_cpu: ${MILVUS_PROXY_REQ_CPU}
+    req_mem: ${MILVUS_PROXY_REQ_MEM}
+    lim_cpu: ${MILVUS_PROXY_LIM_CPU}
+    lim_mem: ${MILVUS_PROXY_LIM_MEM}
+  mixCoordinator:
+    replicas: ${MILVUS_MIXCOORD_REPLICAS}
+    req_cpu: ${MILVUS_MIXCOORD_REQ_CPU}
+    req_mem: ${MILVUS_MIXCOORD_REQ_MEM}
+    lim_cpu: ${MILVUS_MIXCOORD_LIM_CPU}
+    lim_mem: ${MILVUS_MIXCOORD_LIM_MEM}
+  rootCoordinator:
+    replicas: ${MILVUS_ROOTCOORD_REPLICAS}
+    req_cpu: ${MILVUS_ROOTCOORD_REQ_CPU}
+    req_mem: ${MILVUS_ROOTCOORD_REQ_MEM}
+    lim_cpu: ${MILVUS_ROOTCOORD_LIM_CPU}
+    lim_mem: ${MILVUS_ROOTCOORD_LIM_MEM}
+  queryCoordinator:
+    replicas: ${MILVUS_QUERYCOORD_REPLICAS}
+    req_cpu: ${MILVUS_QUERYCOORD_REQ_CPU}
+    req_mem: ${MILVUS_QUERYCOORD_REQ_MEM}
+    lim_cpu: ${MILVUS_QUERYCOORD_LIM_CPU}
+    lim_mem: ${MILVUS_QUERYCOORD_LIM_MEM}
+  queryNode:
+    replicas: ${MILVUS_QUERYNODE_REPLICAS}
+    req_cpu: ${MILVUS_QUERYNODE_REQ_CPU}
+    req_mem: ${MILVUS_QUERYNODE_REQ_MEM}
+    lim_cpu: ${MILVUS_QUERYNODE_LIM_CPU}
+    lim_mem: ${MILVUS_QUERYNODE_LIM_MEM}
+  indexCoordinator:
+    replicas: ${MILVUS_INDEXCOORD_REPLICAS}
+    req_cpu: ${MILVUS_INDEXCOORD_REQ_CPU}
+    req_mem: ${MILVUS_INDEXCOORD_REQ_MEM}
+    lim_cpu: ${MILVUS_INDEXCOORD_LIM_CPU}
+    lim_mem: ${MILVUS_INDEXCOORD_LIM_MEM}
+  indexNode:
+    replicas: ${MILVUS_INDEXNODE_REPLICAS}
+    req_cpu: ${MILVUS_INDEXNODE_REQ_CPU}
+    req_mem: ${MILVUS_INDEXNODE_REQ_MEM}
+    lim_cpu: ${MILVUS_INDEXNODE_LIM_CPU}
+    lim_mem: ${MILVUS_INDEXNODE_LIM_MEM}
+  dataCoordinator:
+    replicas: ${MILVUS_DATACOORD_REPLICAS}
+    req_cpu: ${MILVUS_DATACOORD_REQ_CPU}
+    req_mem: ${MILVUS_DATACOORD_REQ_MEM}
+    lim_cpu: ${MILVUS_DATACOORD_LIM_CPU}
+    lim_mem: ${MILVUS_DATACOORD_LIM_MEM}
+  dataNode:
+    replicas: ${MILVUS_DATANODE_REPLICAS}
+    req_cpu: ${MILVUS_DATANODE_REQ_CPU}
+    req_mem: ${MILVUS_DATANODE_REQ_MEM}
+    lim_cpu: ${MILVUS_DATANODE_LIM_CPU}
+    lim_mem: ${MILVUS_DATANODE_LIM_MEM}
+  attu:
+    req_cpu: ${MILVUS_ATTU_REQ_CPU}
+    req_mem: ${MILVUS_ATTU_REQ_MEM}
+    lim_cpu: ${MILVUS_ATTU_LIM_CPU}
+    lim_mem: ${MILVUS_ATTU_LIM_MEM}
+  minio:
+    disk_size: ${MILVUS_MINIO_DISK_SIZE}
+    replicas: ${MILVUS_MINIO_REPLICAS}
+    req_cpu: ${MILVUS_MINIO_REQ_CPU}
+    req_mem: ${MILVUS_MINIO_REQ_MEM}
+    lim_cpu: ${MILVUS_MINIO_LIM_CPU}
+    lim_mem: ${MILVUS_MINIO_LIM_MEM}
+  etcd:
+    disk_size: ${MILVUS_ETCD_DISK_SIZE}
+    replicas: ${MILVUS_ETCD_REPLICAS}
+    req_cpu: ${MILVUS_ETCD_REQ_CPU}
+    req_mem: ${MILVUS_ETCD_REQ_MEM}
+    lim_cpu: ${MILVUS_ETCD_LIM_CPU}
+    lim_mem: ${MILVUS_ETCD_LIM_MEM}
+  kafka:
+    replicas: ${MILVUS_KAFKA_REPLICAS}
+    disk_size: ${MILVUS_KAFKA_DISK_SIZE}
+    req_cpu: ${MILVUS_KAFKA_REQ_CPU}
+    req_mem: ${MILVUS_KAFKA_REQ_MEM}
+    lim_cpu: ${MILVUS_KAFKA_LIM_CPU}
+    lim_mem: ${MILVUS_KAFKA_LIM_MEM}
+    heap_opts: ${MILVUS_KAKFA_HEAP_OPTS} 
+    zk_nodes: ${MILVUS_KAFKA_ZK_NODES}
+    

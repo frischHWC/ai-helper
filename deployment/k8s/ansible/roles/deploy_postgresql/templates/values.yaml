@@ -1,0 +1,17 @@
+# Refer to this template for more configs: https://github.com/bitnami/charts/blob/main/bitnami/postgresql/values.yaml
+global:
+  postgresql:
+    auth:
+      username: openwebui
+      password: openwebui1234
+      database: webuidb
+primary:
+  persistence:
+    size: {{ postgresql.disk_size }}
+  resources: 
+    requests:
+      cpu: {{ postgresql.req_cpu }}
+      memory: {{ postgresql.req_mem }}
+    limits:
+      cpu: {{ postgresql.lim_cpu }}
+      memory: {{ postgresql.lim_mem }}

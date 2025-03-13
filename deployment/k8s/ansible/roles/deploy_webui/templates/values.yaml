@@ -1,0 +1,36 @@
+# Refer to https://github.com/open-webui/helm-charts/blob/main/charts/open-webui/values.yaml
+image:
+  tag: 0.5.20
+extraEnvVars:
+  - name: RAG_EMBEDDING_MODEL
+    value: nomic-embed-text
+  - name: RAG_EMBEDDING_ENGINE
+    value: ollama
+  - name: OLLAMA_BASE_URL
+    value: http://ollama.ai-helper:11434
+  - name: ENABLE_OLLAMA_API
+    value: "True"
+  - name: VECTOR_DB
+    value: milvus
+  - name: MILVUS_URI
+    value: http://root:admin@milvus.ai-helper:19530
+  - name: DATABASE_URL
+    value: postgresql://openwebui:openwebui1234@postgresql.ai-helper:5432/webuidb
+  - name: DATABASE_POOL_SIZE
+    value: "{{ openwebui.db_pool_size }}"
+ollama:
+  enabled: false
+ingress:
+  enabled: true
+  host: openwebui.{{ domain_name }}
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: 256M
+persistence:
+  size: {{ openwebui.disk_size }}
+resources: 
+  requests:
+    cpu: {{ openwebui.req_cpu }}
+    memory: {{ openwebui.req_mem }}
+  limits:
+    cpu: {{ openwebui.lim_cpu }}
+    memory: {{ openwebui.lim_mem }}
