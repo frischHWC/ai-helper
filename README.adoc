@@ -17,7 +17,7 @@ To stop it, run either the script _stop.sh_ or the command:
         docker compose down
 
 
-Access open-webui by going to: [http://localhost:8001/](http://localhost:8001/)
+Access open-webui by going to: (http://localhost:8001/)[http://localhost:8001/]
 
 Login the first time with the user that you want and keep it for future access.
 

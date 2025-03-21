@@ -1,6 +1,6 @@
 # Refer to https://github.com/otwld/ollama-helm/blob/main/values.yaml
 ollama:
-{% if gpu_enabled == 'true' %}
+{% if gpu_enabled == "true" %}
   gpu:
     enabled: true
     type: 'nvidia'
@@ -25,9 +25,15 @@ resources:
   requests:
     cpu: {{ ollama.req_cpu }}
     memory: {{ ollama.req_mem }}
+{% if gpu_enabled == "true" %}
+    nvidia.com/gpu: 1
+{% endif %}
   limits:
     cpu: {{ ollama.lim_cpu }}
     memory: {{ ollama.lim_mem }}
+{% if gpu_enabled == "true" %}
+    nvidia.com/gpu: 1
+{% endif %}
 
 persistentVolume:
   enabled: true

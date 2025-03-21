@@ -4,7 +4,7 @@ domain_name: ${DOMAIN_NAME}
 destroy_previous: ${DESTROY_PREVIOUS}
 kube_namespace: ${NAMESPACE}
 kubeconfig_file: ${KUBECONFIG_FILE}
-gpu_enabled: ${GPU_ENABLED}
+gpu_enabled: "${GPU_ENABLED}"
 helm_bin_path: ${HELM_BIN_PATH}
 
 
