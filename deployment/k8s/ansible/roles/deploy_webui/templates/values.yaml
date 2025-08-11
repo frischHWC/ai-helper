@@ -1,6 +1,6 @@
 # Refer to https://github.com/open-webui/helm-charts/blob/main/charts/open-webui/values.yaml
 image:
-  tag: 0.5.20
+  tag: 0.6.18
 extraEnvVars:
   - name: RAG_EMBEDDING_MODEL
     value: nomic-embed-text
@@ -18,6 +18,15 @@ extraEnvVars:
     value: postgresql://openwebui:openwebui1234@postgresql.ai-helper:5432/webuidb
   - name: DATABASE_POOL_SIZE
     value: "{{ openwebui.db_pool_size }}"
+  - name: DEFAULT_MODELS
+    value: mistral:latest
+extraEnvFrom: 
+  - configMapRef:
+      name: extra-params
+volumes:
+- name: "extra-params"
+  configMap:
+      name: "extra-params"
 ollama:
   enabled: false
 ingress:

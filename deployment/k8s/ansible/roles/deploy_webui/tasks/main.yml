@@ -5,11 +5,33 @@
     name: open-webui
     repo_url: "https://open-webui.github.io/helm-charts"
 
+- name: Include sensitive vars
+  include_vars:
+    file: owb.yaml
+  ignore_errors: true
+
+- name: Create ConfigMap for extra env
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: extra-params
+        namespace: "{{ kube_namespace }}"
+      data:
+        ENABLE_WEB_SEARCH: "{{ enable_web_search | default('False') | string }}"
+        WEB_SEARCH_ENGINE: "{{ web_search_engine | default('google_pse') | string }}"
+        GOOGLE_PSE_API_KEY: "{{ google_pse_api_key | default('') | string }}"
+        GOOGLE_PSE_ENGINE_ID: "{{ google_pse_engine_id | default('') | string }}"
+        OPENAI_API_KEY: "{{ openai_api_key | default('') | string }}"
+        WEBUI_AUTH: "{{ webui_auth | default('True') | string }}"
+
 - name: DEBUG - values.yaml
   debug:
     msg: "{{ lookup('template', 'values.yaml') | from_yaml }}"
   when: debug | default(false)
-  
+
 - name: Deploy Open WebUI with helm
   kubernetes.core.helm:
     binary_path: "{{ helm_bin_path }}"

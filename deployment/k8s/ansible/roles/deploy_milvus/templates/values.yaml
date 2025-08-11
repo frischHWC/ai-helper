@@ -1,7 +1,7 @@
 # Refer to https://github.com/zilliztech/milvus-helm/blob/master/charts/milvus/values.yaml
 image:
   all:
-    tag: v2.5.6
+    tag: v2.6.0
 
 ingress:
   enabled: true

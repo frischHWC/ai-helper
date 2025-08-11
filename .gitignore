@@ -1,3 +1,6 @@
 deployment/docker/volumes/
 deployment/docker/volumes/**
 deployment/k8s/launch.sh
+deployment/docker/launch.sh
+deployment/docker/owb.env
+deployment/k8s/ansible/roles/deploy_webui/vars/owb.yaml

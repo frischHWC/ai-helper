@@ -71,13 +71,13 @@ services:
       - "milvus-standalone"
 
   ollama:
-    image: ollama/ollama:0.5.7
+    container_name: ollama
+    image: ollama/ollama:0.9.5
     ports:
       - "11434:11434"
     volumes:
       - ./run_models.sh:/root/run_models.sh
       - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/ollama:/root/.ollama
-    container_name: ollama
     tty: true
     restart: always
     entrypoint: ["/bin/sh", "/root/run_models.sh"]
@@ -87,19 +87,35 @@ services:
   
   openwebui:
     container_name: open-webui
-    image: ghcr.io/open-webui/open-webui:v0.5.15
+    image: ghcr.io/open-webui/open-webui:v0.6.18
     ports:
       - "8001:8080"
     volumes:
       - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/open-webui:/app/backend/data
     environment:
+      - WEBUI_AUTH=False 
       - VECTOR_DB=milvus
       - RAG_EMBEDDING_ENGINE=ollama
       - RAG_EMBEDDING_MODEL=nomic-embed-text
       - MILVUS_URI=http://root:admin@milvus-standalone:19530
+      - ENABLE_WEB_SEARCH=True
+      - WEB_SEARCH_ENGINE=google_pse
+    env_file: owb.env
     depends_on:
       - "milvus-standalone"
       - "ollama"
+
+  nginx:
+    container_name: nginx
+    image: nginx:alpine
+    ports:
+      - "443:443"
+    volumes:
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/nginx/conf.d:/etc/nginx/conf.d
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/nginx/ssl:/etc/nginx/ssl
+    depends_on:
+      - open-webui
+    restart: always
 
 networks:
   default:
