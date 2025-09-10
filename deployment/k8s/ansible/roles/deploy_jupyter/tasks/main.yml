@@ -1,20 +1,20 @@
 ---
-- name: Add bitnami repo
+- name: Add Jupyter repo
   kubernetes.core.helm_repository:
     binary_path: "{{ helm_bin_path }}"
-    name: bitnami
-    repo_url: "https://charts.bitnami.com/bitnami"
+    name: jupyterhub
+    repo_url: "https://hub.jupyter.org/helm-chart/"
 
 - name: DEBUG - values.yaml
   debug:
     msg: "{{ lookup('template', 'values.yaml') | from_yaml }}"
   when: debug | default(false)
   
-- name: Deploy PostgreSQL with helm
+- name: Deploy Jupyter with helm
   kubernetes.core.helm:
     binary_path: "{{ helm_bin_path }}"
-    name: postgresql
-    chart_ref: bitnami/postgresql
+    name: jupyter
+    chart_ref: jupyterhub/jupyterhub
     #chart_version: 0.5.12
     values: "{{ lookup('template', 'values.yaml') | from_yaml }}"
     release_namespace: "{{ kube_namespace }}"

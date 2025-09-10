@@ -1,0 +1,32 @@
+# Refer to this template for more configs: https://github.com/ray-project/kuberay/blob/master/helm-chart/ray-cluster/values.yaml
+
+head:
+  resources:
+    limits:
+      cpu: "1"
+      memory: "4G"
+    requests:
+      cpu: "500m"
+      memory: "1G"
+
+
+worker:
+  groupName: workergroup
+
+  replicas: 1
+  minReplicas: 1
+  maxReplicas: 4
+
+  resources:
+    limits:
+      cpu: "1"
+      memory: "12G"
+{% if gpu_enabled == "true" %}
+      nvidia.com/gpu: 1
+{% endif %}
+    requests:
+      cpu: "1"
+      memory: "8G"
+{% if gpu_enabled == "true" %}
+      nvidia.com/gpu: 1
+{% endif %}

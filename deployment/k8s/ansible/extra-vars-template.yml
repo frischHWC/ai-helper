@@ -6,6 +6,8 @@ kube_namespace: ${NAMESPACE}
 kubeconfig_file: ${KUBECONFIG_FILE}
 gpu_enabled: "${GPU_ENABLED}"
 helm_bin_path: ${HELM_BIN_PATH}
+hf_token: "${HF_TOKEN}"
+scheduler_name: ${SCHEDULER_NAME}
 
 
 # Open Webui

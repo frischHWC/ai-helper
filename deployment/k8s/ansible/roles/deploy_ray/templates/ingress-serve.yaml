@@ -1,0 +1,24 @@
+---
+kind: Ingress
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: rayserve
+  namespace: {{ kube_namespace }}
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: 256M
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: '600'
+    nginx.ingress.kubernetes.io/proxy-read-timeout: '600'
+    nginx.ingress.kubernetes.io/proxy-send-timeout: '600'
+spec:
+  rules:
+    - host: rayserve.{{ domain_name }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: ray-serve-llm-serve-svc
+                port:
+                  number: 8000
+            

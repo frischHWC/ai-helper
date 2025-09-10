@@ -1,0 +1,25 @@
+# Refer to this template for more configs: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/HEAD/jupyterhub/values.yaml
+
+ingress:
+  enabled: true
+  hosts: 
+  - jupyter.{{ domain_name }}
+  pathType: Prefix
+
+singleuser:
+  memory:
+    limit: 4G
+    guarantee: 1G
+  cpu:
+    limit: 1
+    guarantee: .5
+  storage:
+    capacity: 50Gi
+  profileList:
+    - display_name: "GPU Server"
+      description: "Spawns a notebook server with access to a GPU"
+      kubespawner_override:
+        extra_resource_limits:
+          nvidia.com/gpu: "1"
+    - display_name: "Classwic"
+      description: "Spawns a notebook server with 1CPU/4GB"

@@ -18,7 +18,9 @@
   hosts: node
   gather_facts: false
   roles: 
+    - role: deploy_ray
     - role: deploy_ollama
     - role: deploy_milvus
     - role: deploy_postgresql
     - role: deploy_webui
+    - role: deploy_jupyter

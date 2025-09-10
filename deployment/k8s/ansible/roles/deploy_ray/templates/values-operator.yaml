@@ -1,0 +1,6 @@
+# Refer to this template for more configs: https://github.com/ray-project/kuberay/blob/master/helm-chart/kuberay-operator/values.yaml
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 512Mi

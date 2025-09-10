@@ -1,0 +1,59 @@
+---
+- name: Add Ray repo
+  kubernetes.core.helm_repository:
+    binary_path: "{{ helm_bin_path }}"
+    name: kuberay
+    repo_url: "https://ray-project.github.io/kuberay-helm/"
+
+- name: DEBUG - values-operator.yaml
+  debug:
+    msg: "{{ lookup('template', 'values-operator.yaml') | from_yaml }}"
+  when: debug | default(false)
+  
+- name: Deploy Ray Operator with helm
+  kubernetes.core.helm:
+    binary_path: "{{ helm_bin_path }}"
+    name: kuberay-operator
+    chart_ref: kuberay/kuberay-operator 
+    chart_version: 1.4.2
+    values: "{{ lookup('template', 'values-operator.yaml') | from_yaml }}"
+    release_namespace: "{{ kube_namespace }}"
+    update_repo_cache: true
+
+- name: Deploy Ray Service (and cluster)
+  kubernetes.core.k8s:
+    state: present
+    definition: "{{ lookup('template', 'ray-serv.yaml') | from_yaml }}"
+
+- name: Shell the kubernetes ingress
+  shell: "kubectl --kubeconfig={{ kubeconfig_file }} get svc -n ai-helper | grep ray-serve-llm | grep head-svc | awk '{ print $1}' "
+  register: ray_service_name_cmd
+
+- name: DEBUG ray_service_name_cmd
+  debug:
+    msg: "{{ ray_service_name_cmd }}"
+  when: debug | default(false)
+
+- name: Get the full service name
+  set_fact: 
+    ray_service_name: "{{ ray_service_name_cmd.stdout }}"
+
+- name: DEBUG ray_service_name
+  debug:
+    msg: "{{ ray_service_name }}"
+  when: debug | default(false)
+
+- name: Create Ray Dashboard ingress
+  kubernetes.core.k8s:
+    state: present
+    definition: "{{ lookup('template', 'ingress.yaml') | from_yaml }}"
+
+- name: Create Ray Serve ingress
+  kubernetes.core.k8s:
+    state: present
+    definition: "{{ lookup('template', 'ingress-inf.yaml') | from_yaml }}"
+
+# - name: Create Ray-Inf ingress
+#   kubernetes.core.k8s:
+#     state: present
+#     definition: "{{ lookup('template', 'ingress-inf.yaml') | from_yaml }}"

@@ -1,0 +1,100 @@
+# Example coming from https://raw.githubusercontent.com/ray-project/kuberay/master/ray-operator/config/samples/ray-service.llm-serve.yaml
+---
+apiVersion: ray.io/v1
+kind: RayService
+metadata:
+  name: ray-serve-llm
+  namespace: "{{ kube_namespace }}"
+spec:
+  serveConfigV2: |
+    applications:
+    - name: llms
+      import_path: ray.serve.llm:build_openai_app
+      route_prefix: "/"
+      args:
+        llm_configs:
+        - model_loading_config:
+            model_id: qwen2.5-7b-instruct
+            model_source: Qwen/Qwen2.5-7B-Instruct
+          engine_kwargs:
+            dtype: bfloat16
+            max_model_len: 1024
+            device: auto
+            gpu_memory_utilization: 0.75
+            tensor_parallel_size: 1
+            pipeline_parallel_size: 1
+          deployment_config:
+            autoscaling_config:
+              min_replicas: 1
+              max_replicas: 2
+              target_ongoing_requests: 64
+            max_ongoing_requests: 128
+          runtime_env:
+            env_vars:
+                VLLM_USE_V1: "1"
+  rayClusterConfig:
+    rayVersion: "2.46.0"
+    headGroupSpec:
+      rayStartParams:
+        num-cpus: "1"
+        num-gpus: "0"
+      template:
+        spec:
+          containers:
+          - name: ray-head
+            image: rayproject/ray-llm:2.46.0-py311-cu124
+            ports:
+            - containerPort: 8000
+              name: serve
+              protocol: TCP
+            - containerPort: 8080
+              name: metrics
+              protocol: TCP
+            - containerPort: 6379
+              name: gcs
+              protocol: TCP
+            - containerPort: 8265
+              name: dashboard
+              protocol: TCP
+            - containerPort: 10001
+              name: client
+              protocol: TCP
+            resources:
+              limits:
+                cpu: 1
+                memory: 4Gi
+              requests:
+                cpu: 500m
+                memory: 1Gi
+    workerGroupSpecs:
+    - replicas: 1
+      minReplicas: 1
+      maxReplicas: 2
+      numOfHosts: 2
+      groupName: gpu-group
+      rayStartParams:
+        num-cpus: "1"
+{% if gpu_enabled == "true" %}
+        num-gpus: "1"
+{% endif %}
+      template:
+        spec:
+          containers:
+          - name: ray-worker
+            image: rayproject/ray-llm:2.46.0-py311-cu124
+            env:
+            - name: HUGGING_FACE_HUB_TOKEN
+              value: "{{ hf_token }}"
+            resources:
+              limits:
+                cpu: 2
+                memory: 12Gi
+{% if gpu_enabled == "true" %}
+                nvidia.com/gpu: 1
+{% endif %}
+              requests:
+                cpu: 1
+                memory: 6Gi
+{% if gpu_enabled == "true" %}
+                nvidia.com/gpu: 1
+{% endif %}

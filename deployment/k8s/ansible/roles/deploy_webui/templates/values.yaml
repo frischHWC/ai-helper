@@ -1,25 +1,27 @@
 # Refer to https://github.com/open-webui/helm-charts/blob/main/charts/open-webui/values.yaml
 image:
-  tag: 0.6.18
+  tag: 0.6.28
 extraEnvVars:
   - name: RAG_EMBEDDING_MODEL
     value: nomic-embed-text
   - name: RAG_EMBEDDING_ENGINE
     value: ollama
   - name: OLLAMA_BASE_URL
-    value: http://ollama.ai-helper:11434
+    value: http://ollama.{{ kube_namespace }}:11434
   - name: ENABLE_OLLAMA_API
     value: "True"
   - name: VECTOR_DB
     value: milvus
   - name: MILVUS_URI
-    value: http://root:admin@milvus.ai-helper:19530
+    value: http://root:admin@milvus.{{ kube_namespace }}:19530
   - name: DATABASE_URL
-    value: postgresql://openwebui:openwebui1234@postgresql.ai-helper:5432/webuidb
+    value: postgresql://openwebui:openwebui1234@postgresql.{{ kube_namespace }}:5432/webuidb
   - name: DATABASE_POOL_SIZE
     value: "{{ openwebui.db_pool_size }}"
   - name: DEFAULT_MODELS
-    value: mistral:latest
+    value: mistral-small3.2:latest
+  - name: OPENAI_API_BASE_URLS
+    value: http://ray-serve-llm-serve-svc.{{ kube_namespace }}:8000/v1
 extraEnvFrom: 
   - configMapRef:
       name: extra-params

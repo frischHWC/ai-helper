@@ -23,7 +23,7 @@ apply_XS() {
     export PSQL_LIM_MEM="256Mi"
 
     # OLLAMA
-    export OLLAMA_DISK_SIZE="50Gi"
+    export OLLAMA_DISK_SIZE="100Gi"
     export OLLAMA_REQ_CPU="500m"
     export OLLAMA_REQ_MEM="2Gi"
     export OLLAMA_LIM_CPU="1"
@@ -145,7 +145,7 @@ apply_S() {
     export PSQL_LIM_MEM="256Mi"
 
     # OLLAMA
-    export OLLAMA_DISK_SIZE="50Gi"
+    export OLLAMA_DISK_SIZE="100Gi"
     export OLLAMA_REQ_CPU="500m"
     export OLLAMA_REQ_MEM="2Gi"
     export OLLAMA_LIM_CPU="2"
@@ -267,7 +267,7 @@ apply_M() {
     export PSQL_LIM_MEM="1Gi"
 
     # OLLAMA
-    export OLLAMA_DISK_SIZE="100Gi"
+    export OLLAMA_DISK_SIZE="500Gi"
     export OLLAMA_REQ_CPU="500m"
     export OLLAMA_REQ_MEM="2Gi"
     export OLLAMA_LIM_CPU="2"
@@ -390,7 +390,7 @@ apply_L() {
     export PSQL_LIM_MEM="1Gi"
 
     # OLLAMA
-    export OLLAMA_DISK_SIZE="100Gi"
+    export OLLAMA_DISK_SIZE="1000Gi"
     export OLLAMA_REQ_CPU="500m"
     export OLLAMA_REQ_MEM="2Gi"
     export OLLAMA_LIM_CPU="2"
@@ -512,7 +512,7 @@ apply_XL() {
     export PSQL_LIM_MEM="8Gi"
 
     # OLLAMA
-    export OLLAMA_DISK_SIZE="1000Gi"
+    export OLLAMA_DISK_SIZE="2000Gi"
     export OLLAMA_REQ_CPU="500m"
     export OLLAMA_REQ_MEM="2Gi"
     export OLLAMA_LIM_CPU="4"

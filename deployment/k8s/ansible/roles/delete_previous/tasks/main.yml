@@ -1,4 +1,28 @@
 ---
+- name: Remove Jupyter helm 
+  kubernetes.core.helm:
+    binary_path: "{{ helm_bin_path }}"
+    name: jupyter
+    state: absent
+    wait: true
+    release_namespace: "{{ kube_namespace }}"
+
+- name: Remove Ray Cluster helm 
+  kubernetes.core.helm:
+    binary_path: "{{ helm_bin_path }}"
+    name: raycluster
+    state: absent
+    wait: true
+    release_namespace: "{{ kube_namespace }}"
+
+- name: Remove Ray Operator helm 
+  kubernetes.core.helm:
+    binary_path: "{{ helm_bin_path }}"
+    name: kuberay-operator
+    state: absent
+    wait: true
+    release_namespace: "{{ kube_namespace }}"
+
 - name: Remove milvus helm 
   kubernetes.core.helm:
     binary_path: "{{ helm_bin_path }}"

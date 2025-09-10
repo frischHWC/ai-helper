@@ -11,7 +11,9 @@ export INSTALL_PYTHON="false"
 export GPU_ENABLED="false"
 export HELM_BIN_PATH="/usr/local/bin/helm"
 export T_SHIRT_SIZE="S"
+export HF_TOKEN=""
 export DEBUG="false"
+export SCHEDULER_NAME="default-scheduler"
 
 
 function usage()
@@ -36,6 +38,8 @@ function usage()
     echo "  --gpu-enabled=$GPU_ENABLED To set GPU or not  "
     echo "  --helm-bin-path=$HELM_BIN_PATH To override helm bin path  "
     echo "  --t-shirt-size=$T_SHIRT_SIZE To set the default size of the deployment among: XS, S, M, L, XL  "
+    echo "  --hf-token=$HF_TOKEN To be able to download HF models  "
+    echo "  --scheduler-name=$SCHEDULER_NAME To change the kubernetes scheduler "
     echo ""
 }
 
@@ -90,6 +94,13 @@ while [ "$1" != "" ]; do
         --t-shirt-size)
             T_SHIRT_SIZE=$VALUE
             ;;
+        --hf-token)
+            HF_TOKEN=$VALUE
+            ;; 
+        --scheduler-name)
+            SCHEDULER_NAME=$VALUE
+            ;;  
+
         *)
             ;;
     esac

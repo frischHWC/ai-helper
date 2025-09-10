@@ -50,7 +50,7 @@ server {
         proxy_read_timeout 10m;
     }
 }
-````
+```
 
 Go to directory _deployment/docker_ and run either the script _start.sh_ or the command:
 
@@ -103,5 +103,4 @@ Example to launch a deployment on node: 'mynode' and let the playbook install an
 Access open-webui by going to: [http://openwebui.my.domain.com:8001/](http://openwebui.my.domain.com:8001/)
 
 Login the first time with the user that you want and keep it for future access.
-
 
