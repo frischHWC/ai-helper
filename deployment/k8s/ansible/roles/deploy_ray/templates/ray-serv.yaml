@@ -14,15 +14,18 @@ spec:
       args:
         llm_configs:
         - model_loading_config:
-            model_id: qwen2.5-7b-instruct
-            model_source: Qwen/Qwen2.5-7B-Instruct
+            model_id: ministral-8B-instruct-2410
+            model_source: mistralai/Ministral-8B-Instruct-2410
           engine_kwargs:
             dtype: bfloat16
-            max_model_len: 1024
+            max_model_len: 8196
             device: auto
-            gpu_memory_utilization: 0.75
+            gpu_memory_utilization: 0.9
             tensor_parallel_size: 1
             pipeline_parallel_size: 1
+            tokenizer_mode: "mistral" 
+            config_format: "mistral"
+            load_format: "mistral"
           deployment_config:
             autoscaling_config:
               min_replicas: 1
@@ -32,8 +35,9 @@ spec:
           runtime_env:
             env_vars:
                 VLLM_USE_V1: "1"
+                HF_TOKEN: "{{ hf_token }}"
   rayClusterConfig:
-    rayVersion: "2.46.0"
+    rayVersion: "2.47.1"
     headGroupSpec:
       rayStartParams:
         num-cpus: "1"
@@ -42,7 +46,7 @@ spec:
         spec:
           containers:
           - name: ray-head
-            image: rayproject/ray-llm:2.46.0-py311-cu124
+            image: rayproject/ray-llm:2.47.1-py311-cu124
             ports:
             - containerPort: 8000
               name: serve
@@ -81,7 +85,7 @@ spec:
         spec:
           containers:
           - name: ray-worker
-            image: rayproject/ray-llm:2.46.0-py311-cu124
+            image: rayproject/ray-llm:2.47.1-py311-cu124
             env:
             - name: HUGGING_FACE_HUB_TOKEN
               value: "{{ hf_token }}"

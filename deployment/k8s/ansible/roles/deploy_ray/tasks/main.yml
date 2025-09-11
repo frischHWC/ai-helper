@@ -51,7 +51,7 @@
 - name: Create Ray Serve ingress
   kubernetes.core.k8s:
     state: present
-    definition: "{{ lookup('template', 'ingress-inf.yaml') | from_yaml }}"
+    definition: "{{ lookup('template', 'ingress-serve.yaml') | from_yaml }}"
 
 # - name: Create Ray-Inf ingress
 #   kubernetes.core.k8s:

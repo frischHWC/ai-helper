@@ -16,4 +16,4 @@ primary:
       cpu: {{ postgresql.lim_cpu }}
       memory: {{ postgresql.lim_mem }}
 
-schedulerName: {{ scheduler_name }}
+#schedulerName: {{ scheduler_name }}
