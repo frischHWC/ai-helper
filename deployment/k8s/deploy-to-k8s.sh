@@ -14,6 +14,7 @@ export T_SHIRT_SIZE="S"
 export HF_TOKEN=""
 export DEBUG="false"
 export SCHEDULER_NAME="default-scheduler"
+export DEPLOY_JUPYTER="false"
 
 
 function usage()
@@ -40,6 +41,7 @@ function usage()
     echo "  --t-shirt-size=$T_SHIRT_SIZE To set the default size of the deployment among: XS, S, M, L, XL  "
     echo "  --hf-token=$HF_TOKEN To be able to download HF models  "
     echo "  --scheduler-name=$SCHEDULER_NAME To change the kubernetes scheduler "
+    echo "  --deploy-jupyter=$DEPLOY_JUPYTER To deploy jupyterhub or not "
     echo ""
 }
 
@@ -99,6 +101,9 @@ while [ "$1" != "" ]; do
             ;; 
         --scheduler-name)
             SCHEDULER_NAME=$VALUE
+            ;;
+        --deploy-jupyter)
+            DEPLOY_JUPYTER=$VALUE
             ;;  
 
         *)

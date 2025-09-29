@@ -9,9 +9,9 @@ ollama:
   models:
     pull:
       - nomic-embed-text
-      - mistral
+      - mistral-nemo
     run:
-      - mistral
+      - mistral-nemo
 
 ingress:
   enabled: true
